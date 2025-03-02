@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ModeToggle } from "@/components/ui/ModeToggle";
 import { Album } from "@/shared/types";
 import axios, { AxiosResponse } from "axios";
+import { Disc3, Search } from "lucide-react";
 
 type HomeProps = {
   searchParams: Promise<{ search?: string }>;
@@ -70,35 +71,83 @@ async function getData(
 export default async function Home({ searchParams }: HomeProps) {
   const awaitedSearchParams = await searchParams;
   const data = await getData(awaitedSearchParams.search);
+  const hasResults = data && data.data.albums.items.length > 0;
 
   return (
-    <div className="m-auto h-full items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <main className="row-start-2 flex h-full w-full max-w-screen-xl flex-col items-center gap-8 sm:items-start">
-        <Card className="flex h-full w-full p-0 shadow-2xl">
-          <CardContent className="flex flex-col">
-            <CardHeader className="flex flex-row items-center justify-between p-8">
-              <CardTitle className="text-2xl">Album Poster Generator</CardTitle>
-              <ModeToggle />
-            </CardHeader>
-            <CardContent className="mt-0 flex flex-grow flex-col items-center overflow-auto pt-0">
-              <SearchInput />
-
-              <div className="mt-2 grid grid-cols-3 gap-4 overflow-auto p-4">
-                {data ? (
-                  <>
-                    {data.data.albums.items.map((album, index) => (
-                      <AlbumDisplay key={index} album={album} />
-                    ))}
-                  </>
-                ) : (
-                  <>Search from a album</>
-                )}
+    <div className="from-background to-muted/50 min-h-screen bg-gradient-to-b px-4 py-8 md:px-8 lg:px-12">
+      <main className="mx-auto max-w-7xl">
+        <Card className="bg-background/80 overflow-hidden border-none backdrop-blur-sm">
+          <CardHeader className="bg-background/95 border-b px-6 py-6 md:px-8">
+            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+              <div className="flex items-center gap-3">
+                <Disc3 className="text-primary h-8 w-8" />
+                <CardTitle className="text-2xl font-bold tracking-tight md:text-3xl">
+                  Album Poster Generator
+                </CardTitle>
               </div>
-            </CardContent>
+              <ModeToggle />
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="bg-muted/30 border-b px-6 py-8 md:px-8">
+              <SearchInput />
+            </div>
+
+            <div className="p-6 md:p-8">
+              {!awaitedSearchParams.search ? (
+                <EmptyInitialState />
+              ) : !hasResults ? (
+                <NoResultsState query={awaitedSearchParams.search} />
+              ) : (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {data.data.albums.items.map((album, index) => (
+                    <AlbumDisplay key={album.id || index} album={album} />
+                  ))}
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
+
+        <footer className="text-muted-foreground mt-8 text-center text-sm">
+          <p>
+            © {new Date().getFullYear()} Album Poster Generator. Powered by
+            Spotify API.
+          </p>
+        </footer>
       </main>
-      <footer className="row-start-3 flex flex-wrap items-center justify-center gap-6"></footer>
+    </div>
+  );
+}
+
+function EmptyInitialState() {
+  return (
+    <div className="flex flex-col items-center justify-center py-16 text-center">
+      <Search
+        className="text-muted-foreground/60 h-16 w-16"
+        strokeWidth={1.5}
+      />
+      <h3 className="mt-6 text-xl font-medium">Search for an album</h3>
+      <p className="text-muted-foreground mt-2 max-w-md">
+        Enter an album title above to discover album artwork and generate custom
+        posters
+      </p>
+    </div>
+  );
+}
+
+function NoResultsState({ query }: { query: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-16 text-center">
+      <Search
+        className="text-muted-foreground/60 h-16 w-16"
+        strokeWidth={1.5}
+      />
+      <h3 className="mt-6 text-xl font-medium">No results found</h3>
+      <p className="text-muted-foreground mt-2 max-w-md">
+        We couldn&apos;t find any albums matching &apos;{query}&apos;. Try a
+        different search term.
+      </p>
     </div>
   );
 }
