@@ -12,7 +12,7 @@ interface AlbumDisplayProps {
 
 export function AlbumDisplay({ album }: AlbumDisplayProps) {
   const router = useRouter();
-  const imageUrl = album.images[0]?.url;
+  const imageUrl = album.images?.[0]?.url;
 
   return (
     <Card

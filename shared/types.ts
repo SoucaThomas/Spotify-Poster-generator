@@ -1,7 +1,22 @@
 export interface Album {
-  name: string;
   id: string;
-  images: Array<{ url: string }>;
-  artists: Array<{ name: string }>;
-  release_date: string;
+  name: string;
+  artists?: Array<{
+    name: string;
+    id: string;
+  }>;
+  images?: Array<{
+    url: string;
+    height: number;
+    width: number;
+  }>;
+  release_date?: string;
+  tracks?: {
+    items: Array<{
+      id: string;
+      name: string;
+      duration_ms: number;
+      track_number: number;
+    }>;
+  };
 }
