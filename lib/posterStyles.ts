@@ -14,7 +14,7 @@ export const POSTER_STYLES: PosterStyle[] = [
       backgroundColor: "#ffffff",
       gradientEnabled: false,
       imageOpacity: 100,
-      imageScale: 90,
+      imageScale: 100,
       borderWidth: 0,
       padding: 40,
       layout: "centered",

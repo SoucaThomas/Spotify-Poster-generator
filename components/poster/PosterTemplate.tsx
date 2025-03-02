@@ -74,7 +74,7 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
       {/* Album Info */}
       <motion.div layout className="relative z-10 space-y-1">
         <div className="flex flex-row items-center justify-between">
-          <div className="flex flex-row items-start gap-1">
+          <div className="flex flex-row items-center gap-1">
             <motion.h1
               layout
               className="font-bold break-words"
@@ -139,7 +139,9 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
                 transition={{ duration: 0.3, delay: 0.1 * index }}
               >
                 <span>{track.name}</span>
-                <span>{index !== album.tracks?.items.length - 1 && "|"}</span>
+                <span>
+                  {index !== (album.tracks?.items?.length ?? 0) - 1 && "|"}
+                </span>
               </motion.div>
             ))}
           </motion.div>

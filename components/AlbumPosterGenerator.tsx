@@ -74,8 +74,11 @@ export function AlbumPosterGenerator({ album }: AlbumPosterGeneratorProps) {
       {/* Preview */}
       <div className="flex flex-col">
         <h2 className="mb-4 text-lg font-medium">Preview</h2>
-        <div className="bg-background/50 relative flex aspect-[3/4] items-center justify-center overflow-hidden rounded-lg border p-4">
-          <div ref={posterRef} className="w-full max-w-[400px]">
+        <div className="bg-background/50 relative flex aspect-[1/1.414] items-center justify-center overflow-hidden rounded-lg border p-4">
+          <div
+            ref={posterRef}
+            className="flex w-full items-center justify-center"
+          >
             <PosterTemplate album={album} settings={settings} />
           </div>
         </div>
