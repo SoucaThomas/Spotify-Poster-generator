@@ -15,7 +15,9 @@ export function SearchInput() {
   const [isPending, startTransition] = useTransition();
   const [inputValue, setInputValue] = useState(search || "");
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdateSearch = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     debounce((query: string) => {
       startTransition(async () => {
         await updateSearch();

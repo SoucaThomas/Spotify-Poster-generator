@@ -23,6 +23,9 @@
     "axios": "^1.8.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dom-to-image": "^2.6.0",
+    "dom-to-image-fix": "^2.6.1",
+    "dom-to-image-more": "^3.5.0",
     "framer-motion": "^12.4.7",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.477.0",
@@ -38,6 +41,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
     "@tailwindcss/postcss": "^4.0.9",
+    "@types/dom-to-image": "^2.6.7",
     "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20.17.22",
     "@types/react": "^18.3.18",

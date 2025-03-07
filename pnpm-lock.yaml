@@ -50,6 +50,15 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      dom-to-image:
+        specifier: ^2.6.0
+        version: 2.6.0
+      dom-to-image-fix:
+        specifier: ^2.6.1
+        version: 2.6.1
+      dom-to-image-more:
+        specifier: ^3.5.0
+        version: 3.5.0
       framer-motion:
         specifier: ^12.4.7
         version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -90,6 +99,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.0.9
         version: 4.0.9
+      '@types/dom-to-image':
+        specifier: ^2.6.7
+        version: 2.6.7
       '@types/lodash.debounce':
         specifier: ^4.0.9
         version: 4.0.9
@@ -861,6 +873,9 @@ packages:
   '@tailwindcss/postcss@4.0.9':
     resolution: {integrity: sha512-BT/E+pdMqulavEAVM5NCpxmGEwHiLDPpkmg/c/X25ZBW+izTe+aZ+v1gf/HXTrihRoCxrUp5U4YyHsBTzspQKQ==}
 
+  '@types/dom-to-image@2.6.7':
+    resolution: {integrity: sha512-me5VbCv+fcXozblWwG13krNBvuEOm6kA5xoa4RrjDJCNFOZSWR3/QLtOXimBHk1Fisq69Gx3JtOoXtg1N1tijg==}
+
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
@@ -1162,6 +1177,15 @@ packages:
   doctrine@2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
     engines: {node: '>=0.10.0'}
+
+  dom-to-image-fix@2.6.1:
+    resolution: {integrity: sha512-drFLCVJCuCOlJmoJmkOFKOHLUmEVX+GAG8c/YC9Mi59YgopjkqcJVJCq1SGUm/UTlOHESYgMYMOXU58gMU6i9w==}
+
+  dom-to-image-more@3.5.0:
+    resolution: {integrity: sha512-VF/vwfHsPNMHJb5W/5sAmco3UIlEWSEFLppInQwqwN4joUvBULDwE3CqVcUDkUWleke/nZ5KwIVSrrFlGw7WPA==}
+
+  dom-to-image@2.6.0:
+    resolution: {integrity: sha512-Dt0QdaHmLpjURjU7Tnu3AgYSF2LuOmksSGsUcE6ItvJoCWTBEmiMXcqBdNSAm9+QbbwD7JMoVsuuKX6ZVQv1qA==}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -3004,6 +3028,8 @@ snapshots:
       postcss: 8.5.3
       tailwindcss: 4.0.9
 
+  '@types/dom-to-image@2.6.7': {}
+
   '@types/estree@1.0.6': {}
 
   '@types/json-schema@7.0.15': {}
@@ -3358,6 +3384,12 @@ snapshots:
   doctrine@2.1.0:
     dependencies:
       esutils: 2.0.3
+
+  dom-to-image-fix@2.6.1: {}
+
+  dom-to-image-more@3.5.0: {}
+
+  dom-to-image@2.6.0: {}
 
   dunder-proto@1.0.1:
     dependencies:

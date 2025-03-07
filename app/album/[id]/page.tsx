@@ -6,6 +6,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { AlbumPosterGenerator } from "@/components/AlbumPosterGenerator";
+import { Metadata } from "next";
+
+interface SegmentParams {
+  id: string;
+}
+
+interface PageProps {
+  params: Promise<SegmentParams>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
 
 async function getAlbumDetails(id: string): Promise<Album | null> {
   try {
@@ -48,12 +58,29 @@ async function getAlbumDetails(id: string): Promise<Album | null> {
   }
 }
 
-export default async function GeneratePosterPage({
+export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
-}) {
-  const album = await getAlbumDetails(params.id);
+  params: Promise<SegmentParams>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const album = await getAlbumDetails(id);
+
+  return {
+    title: album ? `Album Poster: ${album.name}` : "Album Not Found",
+  };
+}
+
+export default async function GeneratePosterPage({
+  params,
+}: PageProps) {
+  // Make sure params exists before destructuring
+  if (!params) {
+    throw new Error("Missing required params");
+  }
+  
+  const { id } = await params;
+  const album = await getAlbumDetails(id);
 
   if (!album) {
     return (

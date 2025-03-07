@@ -23,6 +23,7 @@ export interface PosterStyle {
     padding: number;
     layout: string;
     showTracks: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
 }

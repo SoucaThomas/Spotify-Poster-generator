@@ -1,7 +1,6 @@
 "use client";
 
 import type { Album } from "@/shared/types";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 interface PosterTemplateProps {
@@ -60,13 +59,15 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
         transition={{ duration: 0.5 }}
       >
         {album.images?.[0] && (
-          <Image
+          /// Unfortunalty we have to use the img tag here bacause dom-to-image doesn't support next/image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={album.images[0].url || "/placeholder.svg"}
             alt={album.name}
-            fill
             className="object-cover shadow-2xl"
             sizes="(max-width: 768px) 100vw, 4400px"
-            priority
+            // fill
+            // priority
           />
         )}
       </motion.div>

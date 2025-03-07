@@ -22,6 +22,7 @@ import { PosterTemplate } from "./poster/PosterTemplate";
 import { ColorPicker } from "./poster/ColorPicker";
 import { GradientControls } from "./poster/GradientControls";
 import { POSTER_STYLES } from "@/lib/posterStyles";
+import domtoimage from "dom-to-image";
 
 interface AlbumPosterGeneratorProps {
   album: Album;
@@ -32,7 +33,7 @@ export function AlbumPosterGenerator({ album }: AlbumPosterGeneratorProps) {
   const posterRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const updateSetting = (key: string, value: any) => {
+  const updateSetting = (key: string, value: unknown) => {
     setSettings((prev) => ({
       ...prev,
       [key]: value,
@@ -47,25 +48,54 @@ export function AlbumPosterGenerator({ album }: AlbumPosterGeneratorProps) {
   };
 
   const downloadPoster = async () => {
-    if (!posterRef.current) return;
+    if (!posterRef.current) {
+      console.log("No poster to download");
+      return;
+    }
 
     try {
       setIsGenerating(true);
-      setTimeout(() => {
-        setIsGenerating(false);
-        toast({
-          title: "Poster Downloaded",
-          description: "Your poster has been generated and downloaded.",
+      const node = posterRef.current;
+      const scale = 3;
+
+      const style = {
+        transform: "scale(" + scale + ")",
+        transformOrigin: "top left",
+        width: node.offsetWidth + "px",
+        height: node.offsetHeight + "px",
+      };
+
+      const param = {
+        height: node.offsetHeight * scale,
+        width: node.offsetWidth * scale,
+        quality: 1,
+        style,
+      };
+
+      domtoimage
+        .toPng(node, param)
+        .then(function (dataUrl: string) {
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "poster.png";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch(function (error) {
+          console.error("Error generating poster:", error);
+          toast({
+            title: "Error",
+            description: "Failed to generate poster. Please try again.",
+            variant: "destructive",
+          });
+        })
+        .finally(() => {
+          setIsGenerating(false);
         });
-      }, 1500);
     } catch (error) {
-      console.error("Error generating poster:", error);
+      console.error("Error during download:", error);
       setIsGenerating(false);
-      toast({
-        title: "Error",
-        description: "Failed to generate poster. Please try again.",
-        variant: "destructive",
-      });
     }
   };
 
