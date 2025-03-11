@@ -100,7 +100,7 @@ export function AlbumPosterGenerator({ album }: AlbumPosterGeneratorProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-8 p-12 lg:grid-cols-2">
       {/* Preview */}
       <div className="flex flex-col">
         <h2 className="mb-4 text-lg font-medium">Preview</h2>
