@@ -1,12 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Album } from "@/shared/types";
 import axios from "axios";
-import { Disc3 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
-import { AlbumPosterGenerator } from "@/components/AlbumPosterGenerator";
 import { Metadata } from "next";
+import { AlbumPosterGenerator } from "@/components/AlbumPosterGenerator";
 
 interface SegmentParams {
   id: string;
@@ -71,14 +69,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function GeneratePosterPage({
-  params,
-}: PageProps) {
+export default async function GeneratePosterPage({ params }: PageProps) {
   // Make sure params exists before destructuring
   if (!params) {
     throw new Error("Missing required params");
   }
-  
+
   const { id } = await params;
   const album = await getAlbumDetails(id);
 
@@ -101,35 +97,14 @@ export default async function GeneratePosterPage({
   }
 
   return (
-    <div className="from-background to-muted/50 min-h-screen bg-gradient-to-b px-4 py-8 md:px-8 lg:px-12">
-      <main className="mx-auto max-w-7xl">
-        <Card className="bg-background/80 overflow-hidden border-none backdrop-blur-sm">
-          <CardHeader className="bg-background/95 border-b px-6 py-6 md:px-8">
-            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-              <div className="flex items-center gap-3">
-                <Disc3 className="text-primary h-8 w-8" />
-                <div>
-                  <CardTitle className="text-2xl font-bold tracking-tight md:text-3xl">
-                    Create Poster
-                  </CardTitle>
-                  <p className="text-muted-foreground mt-1 text-sm">
-                    Customize your poster for &apos;{album.name}&apos;
-                  </p>
-                </div>
-              </div>
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/">
-                  <ChevronLeft className="mr-2 h-4 w-4" />
-                  Back to Search
-                </Link>
-              </Button>
-            </div>
-          </CardHeader>
+    <main className="from-background to-background/90 min-h-screen bg-gradient-to-b">
+      <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <Card className="bg-background/80 animate-in fade-in-50 border-none shadow-2xl backdrop-blur-sm duration-1000">
           <CardContent className="p-0">
             <AlbumPosterGenerator album={album} />
           </CardContent>
         </Card>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

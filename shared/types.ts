@@ -20,3 +20,11 @@ export interface Album {
     }>;
   };
 }
+
+export type SpotifySearchResults = {
+  albums: {
+    items: Album[];
+  };
+};
+
+export type SearchParamsType = Promise<{ search?: string }>;

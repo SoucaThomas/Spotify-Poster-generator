@@ -1,23 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { PostHogProvider } from "../components/PostHogProvider";
+import { Navbar } from "@/components/navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Album Poster Maker",
-  description: "Made By Thomas",
+  title: "Posterify - Spotify Album Poster Generator",
+  description: "Create beautiful posters from your favorite Spotify albums",
 };
 
 export default function RootLayout({
@@ -28,17 +21,13 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/public/logo.svg" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} h-screen antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <PostHogProvider>
-            <NuqsAdapter>{children}</NuqsAdapter>
+            <NuqsAdapter>
+              <Navbar />
+              {children}
+            </NuqsAdapter>
           </PostHogProvider>
         </ThemeProvider>
       </body>

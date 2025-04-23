@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["i.scdn.co"],
+    domains: ["i.scdn.co", "images.pexels.com"],
   },
   async rewrites() {
     return [
