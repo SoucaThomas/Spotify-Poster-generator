@@ -26,7 +26,7 @@ model Generated {
 }
 
 model Album {
-  id                   String   @id @default(cuid())
+  id                   String   @id 
   totalTracks          Int
   externalUrls         String[]
   spotifyId            String

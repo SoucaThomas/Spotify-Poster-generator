@@ -1,18 +1,22 @@
 "use client";
 
-import type { Album } from "@/shared/types";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Music, User } from "lucide-react";
+import { Album } from "@prisma/client";
 
 interface AlbumDisplayProps {
   album: Album;
 }
 
 export function AlbumDisplay({ album }: AlbumDisplayProps) {
+  console.log("AlbumDisplay", album);
+
   const router = useRouter();
-  const imageUrl = album.images?.[0]?.url;
+  const imageUrl = "https://i.scdn.co/image/" + album.images[0];
+
+  console.log("Image URL:", imageUrl);
 
   return (
     <Card
@@ -42,14 +46,14 @@ export function AlbumDisplay({ album }: AlbumDisplayProps) {
         <div className="text-muted-foreground mt-2 flex items-center gap-2 text-sm">
           <User className="h-3.5 w-3.5" />
           <span className="line-clamp-1">
-            {album.artists?.map((artist) => artist.name).join(", ") ||
+            {album.artists?.map((artist) => artist).join(", ") ||
               "Unknown Artist"}
           </span>
         </div>
 
-        {album.release_date && (
+        {album.releaseDate && (
           <p className="text-muted-foreground mt-1 text-xs">
-            {new Date(album.release_date).getFullYear()}
+            {new Date(album.releaseDate).getFullYear()}
           </p>
         )}
       </CardContent>

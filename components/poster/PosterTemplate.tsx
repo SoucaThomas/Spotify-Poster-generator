@@ -1,6 +1,6 @@
 "use client";
 
-import type { Album } from "@/shared/types";
+import { Album } from "@prisma/client";
 import { motion } from "framer-motion";
 
 interface PosterTemplateProps {
@@ -62,7 +62,7 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
           /// Unfortunalty we have to use the img tag here bacause dom-to-image doesn't support next/image
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={album.images[0].url || "/placeholder.svg"}
+            src={album.images[0] || "/placeholder.svg"}
             alt={album.name}
             className="object-cover shadow-2xl"
             sizes="(max-width: 768px) 100vw, 4400px"
@@ -91,7 +91,7 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
               {album.name}
             </motion.h1>
 
-            {settings.showYear && album.release_date && (
+            {settings.showYear && album.releaseDate && (
               <motion.p
                 layout
                 className="text-sm"
@@ -101,7 +101,7 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
                 exit={{ y: -20, opacity: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                {new Date(album.release_date).getFullYear()}
+                {new Date(album.releaseDate).getFullYear()}
               </motion.p>
             )}
           </div>
@@ -116,12 +116,12 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
               exit={{ y: -20, opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              {album.artists.map((artist) => artist.name).join(", ")}
+              {album.artists.map((artist) => artist).join(", ")}
             </motion.p>
           )}
         </div>
 
-        {settings.showTracks && album.tracks?.items && (
+        {settings.showTracks && album.tracks && (
           <motion.div
             layout
             className="mt-2 flex flex-wrap items-center justify-center gap-2"
@@ -130,19 +130,17 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
-            {album.tracks.items.map((track, index) => (
+            {album.tracks.map((track, index) => (
               <motion.div
-                key={track.id}
+                key={index}
                 className="flex items-center gap-1 text-sm"
                 style={{ color: settings.textColor }}
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.3, delay: 0.1 * index }}
               >
-                <span>{track.name}</span>
-                <span>
-                  {index !== (album.tracks?.items?.length ?? 0) - 1 && "|"}
-                </span>
+                <span>{track}</span>
+                <span>{index !== (album.tracks?.length ?? 0) - 1 && "|"}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -150,19 +148,4 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
       </motion.div>
     </motion.div>
   );
-}
-
-{
-  /* <div className="flex items-center gap-1">
-                  <span className="font-mono">
-                    {String(index + 1).padStart(2, "0")}.
-                  </span>
-                  <span>{track.name}</span>
-                </div>
-                <span className="font-mono opacity-60">
-                  {Math.floor(track.duration_ms / 60000)}:
-                  {String(
-                    Math.floor((track.duration_ms % 60000) / 1000)
-                  ).padStart(2, "0")}
-                </span> */
 }

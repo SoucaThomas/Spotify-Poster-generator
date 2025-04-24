@@ -1,6 +1,9 @@
 "use server";
 
-import { SpotifyApiSearchAlbumsResponse } from "@/shared/types";
+import {
+  SpotifyApiGetAlbumResponse,
+  SpotifyApiSearchAlbumsResponse,
+} from "@/shared/types";
 import { Album } from "@prisma/client";
 import axios, { AxiosResponse } from "axios";
 
@@ -88,11 +91,14 @@ export async function getAlbumDetails(id: string): Promise<Album | undefined> {
     }
 
     const albumResponse = await axios
-      .get(`https://api.spotify.com/v1/albums/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get<SpotifyApiGetAlbumResponse>(
+        `https://api.spotify.com/v1/albums/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .catch((error) => {
         console.error("Error fetching album details:", error);
         throw error;
@@ -100,7 +106,31 @@ export async function getAlbumDetails(id: string): Promise<Album | undefined> {
 
     console.log("Fetched album details from Spotify:", albumResponse.data);
 
-    const album = albumResponse.data as Album;
+    const albumResponseData = albumResponse.data;
+
+    const album: Album = {
+      id: albumResponseData.id,
+      name: albumResponseData.name,
+      artists: albumResponseData.artists.map((artist) => artist.name),
+      releaseDate: albumResponseData.release_date,
+      totalTracks: albumResponseData.total_tracks,
+      spotifyId: albumResponseData.id,
+      images: albumResponseData.images.map((image) => image.url),
+      uri: albumResponseData.uri,
+      externalUrls: [albumResponseData.external_urls.spotify],
+      tracks: albumResponseData.tracks.items.map(
+        (track) => track.name as string
+      ),
+      type: albumResponseData.album_type,
+      label: albumResponseData.label || "Unknown Label",
+      popularity: albumResponseData.popularity || -1,
+      releaseDatePrecision: albumResponseData.release_date_precision,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    };
+
+    console.log("Album details:", album);
 
     if (!album) {
       throw new Error("Album not found");
