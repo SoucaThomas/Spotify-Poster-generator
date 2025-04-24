@@ -12,13 +12,8 @@ type HomeProps = {
 export default async function Home({ searchParams }: HomeProps) {
   const awaitedSearchParams = await searchParams;
   const awaitedSearchParamsString = awaitedSearchParams.search || "";
-  let data: Album[] = [];
 
-  if (awaitedSearchParams !== undefined && awaitedSearchParamsString !== "") {
-    data = await getData(awaitedSearchParamsString);
-  }
-
-  const userAlbums = await prisma.album.findMany({});
+  const data = await getData(awaitedSearchParamsString);
 
   return (
     <main className="from-background to-background/90 min-h-screen bg-gradient-to-b">
@@ -46,7 +41,7 @@ export default async function Home({ searchParams }: HomeProps) {
             </h2>
           </div>
 
-          <AlbumGrid albums={awaitedSearchParamsString ? data : userAlbums} />
+          <AlbumGrid albums={data} />
         </div>
       </section>
     </main>

@@ -1,5 +1,4 @@
 import { prisma } from "@/prisma/prisma";
-import { Album } from "lucide-react";
 
 export async function POST(request: Request) {
   try {
@@ -17,7 +16,7 @@ export async function POST(request: Request) {
       releaseDate: body.album.releaseDate,
       releaseDatePrecision: body.album.releaseDatePrecision,
       label: body.album.label,
-      imageUrl: body.image,
+      imageUrl: body.album.images.map((image: { url: string }) => image.url),
     };
 
     const generatedPoster = await prisma.generated.create({
