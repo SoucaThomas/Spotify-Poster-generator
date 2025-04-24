@@ -104,8 +104,6 @@ export async function getAlbumDetails(id: string): Promise<Album | undefined> {
         throw error;
       });
 
-    console.log("Fetched album details from Spotify:", albumResponse.data);
-
     const albumResponseData = albumResponse.data;
 
     const album: Album = {
@@ -129,8 +127,6 @@ export async function getAlbumDetails(id: string): Promise<Album | undefined> {
       updatedAt: new Date(),
       deletedAt: null,
     };
-
-    console.log("Album details:", album);
 
     if (!album) {
       throw new Error("Album not found");

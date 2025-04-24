@@ -3,8 +3,6 @@ import { prisma } from "@/prisma/prisma";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log(body.album);
-
     console.log("Generated Poster:", body.album.name, " - ", body.album.label);
 
     const albumToSave = {
@@ -26,9 +24,6 @@ export async function POST(request: Request) {
         Settings: body.settings,
       },
     });
-
-    console.log("Generated Poster Record:", generatedPoster);
-
     return new Response(
       JSON.stringify({ message: "Poster logged successfully" }),
       {

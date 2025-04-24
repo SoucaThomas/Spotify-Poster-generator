@@ -33,8 +33,6 @@ export function AlbumPosterGenerator({ album }: AlbumPosterGeneratorProps) {
   const posterRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  console.log("Album Poster Generator", album);
-
   const updateSetting = (key: string, value: unknown) => {
     setSettings((prev) => ({
       ...prev,

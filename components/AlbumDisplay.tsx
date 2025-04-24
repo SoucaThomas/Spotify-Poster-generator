@@ -11,12 +11,8 @@ interface AlbumDisplayProps {
 }
 
 export function AlbumDisplay({ album }: AlbumDisplayProps) {
-  console.log("AlbumDisplay", album);
-
   const router = useRouter();
-  const imageUrl = "https://i.scdn.co/image/" + album.images[0];
-
-  console.log("Image URL:", imageUrl);
+  const imageUrl = album.images[0];
 
   return (
     <Card
