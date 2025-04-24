@@ -1,5 +1,4 @@
 import { prisma } from "@/prisma/prisma";
-import { Album } from "@prisma/client";
 
 export async function POST(request: Request) {
   try {
