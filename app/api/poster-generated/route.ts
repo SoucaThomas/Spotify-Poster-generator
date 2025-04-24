@@ -1,29 +1,27 @@
 import { prisma } from "@/prisma/prisma";
+import { Album } from "@prisma/client";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     console.log("Generated Poster:", body.album.name, " - ", body.album.label);
 
-    const albumToSave = {
-      id: body.album.id,
-      name: body.album.name,
-      artists: body.album.artists.map(
-        (artist: { name: string }) => artist.name
-      ),
-      releaseDate: body.album.releaseDate,
-      releaseDatePrecision: body.album.releaseDatePrecision,
-      label: body.album.label,
-      imageUrl: body.album.images.map((image: { url: string }) => image.url),
-    };
+    // Save the album to the database
+    await prisma.album.upsert({
+      where: { id: body.album.id },
+      update: body.album,
+      create: body.album,
+    });
 
+    // Create a generated record
     await prisma.generated.create({
       data: {
-        Album: albumToSave,
-        GeneratedPosterImage: body.image || "",
-        Settings: body.settings,
+        albumId: body.album.id,
+        generatedImage: body.image,
+        settings: body.settings,
       },
     });
+
     return new Response(
       JSON.stringify({ message: "Poster logged successfully" }),
       {

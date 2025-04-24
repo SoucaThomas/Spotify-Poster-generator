@@ -1,5 +1,6 @@
 "use server";
 
+import { prisma } from "@/prisma/prisma";
 import {
   SpotifyApiGetAlbumResponse,
   SpotifyApiSearchAlbumsResponse,
@@ -36,7 +37,30 @@ const getToken = async () => {
 
 export async function searchForAlbums(searchQuery: string): Promise<Album[]> {
   if (!searchQuery) {
-    return [];
+    // If there is no search query, we return generated albums
+    const userGeneratedAlbums = await prisma.generated.findMany({
+      where: {
+        deletedAt: null,
+      },
+      include: {
+        album: true,
+      },
+    });
+
+    const albums = userGeneratedAlbums.map((generatedAlbum) => {
+      return {
+        id: generatedAlbum.album.id,
+        name: generatedAlbum.album.name,
+        artists: generatedAlbum.album.artists,
+        releaseDate: generatedAlbum.album.releaseDate,
+        totalTracks: generatedAlbum.album.totalTracks,
+        spotifyId: generatedAlbum.album.spotifyId,
+        images: generatedAlbum.album.images,
+        uri: generatedAlbum.album.uri,
+      } as Album;
+    });
+
+    return albums;
   } else {
     const token = await getToken();
     if (!token) {
@@ -44,7 +68,6 @@ export async function searchForAlbums(searchQuery: string): Promise<Album[]> {
     }
 
     // Using the searchQuery we fetch spotify albums
-
     let spotifySearchResults: AxiosResponse<SpotifyApiSearchAlbumsResponse>;
     try {
       spotifySearchResults = await axios.get<SpotifyApiSearchAlbumsResponse>(

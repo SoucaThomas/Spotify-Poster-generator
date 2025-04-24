@@ -16,9 +16,11 @@ datasource db {
 model Generated {
   id String @id @default(cuid())
 
-  Album Json
-  GeneratedPosterImage String
-  Settings Json
+  albumId String
+  album   Album  @relation(fields: [albumId], references: [id])
+
+  generatedImage String
+  settings       Json
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -26,7 +28,7 @@ model Generated {
 }
 
 model Album {
-  id                   String   @id 
+  id                   String   @id
   totalTracks          Int
   externalUrls         String[]
   spotifyId            String
@@ -40,6 +42,8 @@ model Album {
   label                String
   popularity           Int
   releaseDatePrecision String
+
+  generated Generated[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
