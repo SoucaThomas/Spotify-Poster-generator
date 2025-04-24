@@ -37,73 +37,89 @@ const getToken = async () => {
 
 export async function searchForAlbums(searchQuery: string): Promise<Album[]> {
   if (!searchQuery) {
-    // If there is no search query, we return generated albums
-    const userGeneratedAlbums = await prisma.generated.findMany({
-      where: {
-        deletedAt: null,
-      },
-      include: {
-        album: true,
-      },
-    });
-
-    const albums = userGeneratedAlbums.map((generatedAlbum) => {
-      return {
-        id: generatedAlbum.album.id,
-        name: generatedAlbum.album.name,
-        artists: generatedAlbum.album.artists,
-        releaseDate: generatedAlbum.album.releaseDate,
-        totalTracks: generatedAlbum.album.totalTracks,
-        spotifyId: generatedAlbum.album.spotifyId,
-        images: generatedAlbum.album.images,
-        uri: generatedAlbum.album.uri,
-      } as Album;
-    });
-
-    return albums;
-  } else {
-    const token = await getToken();
-    if (!token) {
-      throw new Error("Failed to fetch Spotify token");
-    }
-
-    // Using the searchQuery we fetch spotify albums
-    let spotifySearchResults: AxiosResponse<SpotifyApiSearchAlbumsResponse>;
-    try {
-      spotifySearchResults = await axios.get<SpotifyApiSearchAlbumsResponse>(
-        "https://api.spotify.com/v1/search",
-        {
-          params: {
-            q: searchQuery,
-            type: "album",
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-
-    const albums = spotifySearchResults.data.albums.items.map(
-      (album) =>
-        ({
-          id: album.id,
-          name: album.name,
-          artists: album.artists.map((artist) => artist.name),
-          releaseDate: album.release_date,
-          totalTracks: album.total_tracks,
-          spotifyId: album.id,
-          images: album.images.map((image) => image.url),
-          uri: album.uri,
-        }) as Album
-    );
-
-    console.log("Fetched albums from Spotify for query:", searchQuery);
-    return albums;
+    return [];
   }
+
+  const token = await getToken();
+  if (!token) {
+    throw new Error("Failed to fetch Spotify token");
+  }
+
+  // Using the searchQuery we fetch spotify albums
+  let spotifySearchResults: AxiosResponse<SpotifyApiSearchAlbumsResponse>;
+  try {
+    spotifySearchResults = await axios.get<SpotifyApiSearchAlbumsResponse>(
+      "https://api.spotify.com/v1/search",
+      {
+        params: {
+          q: searchQuery,
+          type: "album",
+          limit: 6,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+
+  const albums = spotifySearchResults.data.albums.items.map(
+    (album) =>
+      ({
+        id: album.id,
+        name: album.name,
+        artists: album.artists.map((artist) => artist.name),
+        releaseDate: album.release_date,
+        totalTracks: album.total_tracks,
+        spotifyId: album.id,
+        images: album.images.map((image) => image.url),
+        uri: album.uri,
+      }) as Album
+  );
+
+  console.log("Fetched albums from Spotify for query:", searchQuery);
+  return albums;
+}
+
+export async function getUserGeneratedAlbums(): Promise<Album[]> {
+  const userGeneratedAlbums = await prisma.generated.findMany({
+    where: {
+      deletedAt: null,
+    },
+    include: {
+      album: true,
+    },
+  });
+
+  const uniqueAlbumsMap = new Map<string, (typeof userGeneratedAlbums)[0]>();
+
+  userGeneratedAlbums.forEach((generatedAlbum) => {
+    if (!uniqueAlbumsMap.has(generatedAlbum.album.id)) {
+      uniqueAlbumsMap.set(generatedAlbum.album.id, generatedAlbum);
+    }
+  });
+
+  const uniqueAlbums = Array.from(uniqueAlbumsMap.values())
+    .slice(0, 6)
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+  const albums = uniqueAlbums.map((generatedAlbum) => {
+    return {
+      id: generatedAlbum.album.id,
+      name: generatedAlbum.album.name,
+      artists: generatedAlbum.album.artists,
+      releaseDate: generatedAlbum.album.releaseDate,
+      totalTracks: generatedAlbum.album.totalTracks,
+      spotifyId: generatedAlbum.album.spotifyId,
+      images: generatedAlbum.album.images,
+      uri: generatedAlbum.album.uri,
+    } as Album;
+  });
+
+  return albums;
 }
 
 export async function getAlbumDetails(id: string): Promise<Album | undefined> {

@@ -22,7 +22,7 @@ export function AlbumDisplay({ album }: AlbumDisplayProps) {
       <div className="bg-muted relative aspect-square overflow-hidden">
         {imageUrl ? (
           <Image
-            src={imageUrl || "/placeholder.svg"}
+            src={imageUrl || "/placeholder.png"}
             alt={album.name}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             fill

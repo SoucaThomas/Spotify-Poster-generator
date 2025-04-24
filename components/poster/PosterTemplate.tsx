@@ -62,7 +62,7 @@ export function PosterTemplate({ album, settings }: PosterTemplateProps) {
           /// Unfortunalty we have to use the img tag here bacause dom-to-image doesn't support next/image
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={album.images[0] || "/placeholder.svg"}
+            src={album.images[0] || "/placeholder.png"}
             alt={album.name}
             className="object-cover shadow-2xl"
             sizes="(max-width: 768px) 100vw, 4400px"
