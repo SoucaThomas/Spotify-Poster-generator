@@ -18,7 +18,7 @@ interface SearchBarProps {
 
 export function SearchBar({ className, onFocusChange }: SearchBarProps) {
   const [search, setSearch] = useQueryState("search", { defaultValue: "" });
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [inputValue, setInputValue] = useState(search || "");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
