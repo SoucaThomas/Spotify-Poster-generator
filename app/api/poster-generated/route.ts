@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       imageUrl: body.album.images.map((image: { url: string }) => image.url),
     };
 
-    const generatedPoster = await prisma.generated.create({
+    await prisma.generated.create({
       data: {
         Album: albumToSave,
         GeneratedPosterImage: body.image || "",
