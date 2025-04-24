@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import { AlbumCard } from "./albumCard";
-import { SpotifySearchResults } from "@/shared/types";
+import { Album } from "@prisma/client";
 
 interface AlbumGridProps {
-  data: SpotifySearchResults;
+  albums: Album[];
 }
 
-export function AlbumGrid({ data }: AlbumGridProps) {
-  if (!data) return null;
+export function AlbumGrid({ albums }: AlbumGridProps) {
+  if (!albums) return null;
 
-  const albums = data.albums.items;
+  console.log("Albums in AlbumGrid:", albums);
 
   return (
     <>
@@ -22,9 +22,9 @@ export function AlbumGrid({ data }: AlbumGridProps) {
               <AlbumCard
                 id={album.id}
                 title={album.name}
-                artist={album.artists?.[0]?.name ?? "Unknown Artist"}
-                year={album.release_date}
-                coverUrl={album.images?.[0]?.url ?? ""}
+                artist={album.artists?.[0] ?? "Unknown Artist"}
+                year={album.releaseDate}
+                coverUrl={album.images?.[0] || "/placeholder.png"}
               />
             </Link>
           ))}

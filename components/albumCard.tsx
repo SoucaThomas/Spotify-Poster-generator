@@ -35,7 +35,7 @@ export function AlbumCard({
     >
       <div className="relative aspect-square overflow-hidden">
         <Image
-          src={coverUrl || "/placeholder.png"}
+          src={coverUrl}
           alt={`${title} by ${artist}`}
           width={300}
           height={300}

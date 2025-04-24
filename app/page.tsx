@@ -2,6 +2,8 @@ import { AlbumGrid } from "@/components/albumGrid";
 import { SearchBar } from "@/components/searchBar";
 import { SearchParamsType } from "@/shared/types";
 import { getData } from "./actionts/spotify";
+import { prisma } from "@/prisma/prisma";
+import { Album } from "@prisma/client";
 
 type HomeProps = {
   searchParams: SearchParamsType;
@@ -9,15 +11,14 @@ type HomeProps = {
 
 export default async function Home({ searchParams }: HomeProps) {
   const awaitedSearchParams = await searchParams;
-  const awaitedSearchParamsString = awaitedSearchParams.search || "popular";
+  const awaitedSearchParamsString = awaitedSearchParams.search || "";
+  let data: Album[] = [];
 
-  const data = await getData(awaitedSearchParamsString);
-  const awaitedData = data?.data;
+  if (awaitedSearchParams !== undefined && awaitedSearchParamsString !== "") {
+    data = await getData(awaitedSearchParamsString);
+  }
 
-  console.log("Search Params:", awaitedSearchParams);
-  console.log("Data:", awaitedData);
-
-  const hasResults = awaitedData && awaitedData.albums.items.length > 0;
+  const userAlbums = await prisma.album.findMany({});
 
   return (
     <main className="from-background to-background/90 min-h-screen bg-gradient-to-b">
@@ -39,13 +40,13 @@ export default async function Home({ searchParams }: HomeProps) {
         <div className="animate-in fade-in-50 mt-16 duration-1000">
           <div className="mb-8 flex items-center justify-between">
             <h2 className="text-2xl font-semibold tracking-tight">
-              {hasResults
+              {awaitedSearchParamsString
                 ? `Results for "${awaitedSearchParamsString}"`
-                : "Popular Albums"}
+                : "Generated Posters by Posterify"}
             </h2>
           </div>
 
-          {awaitedData && <AlbumGrid data={awaitedData} />}
+          <AlbumGrid albums={awaitedSearchParamsString ? data : userAlbums} />
         </div>
       </section>
     </main>

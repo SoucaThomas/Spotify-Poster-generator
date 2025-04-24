@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import type { Album } from "@/shared/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -23,6 +22,7 @@ import { ColorPicker } from "./poster/ColorPicker";
 import { GradientControls } from "./poster/GradientControls";
 import { POSTER_STYLES } from "@/lib/posterStyles";
 import domtoimage from "dom-to-image";
+import { Album } from "@prisma/client";
 
 interface AlbumPosterGeneratorProps {
   album: Album;
@@ -92,6 +92,23 @@ export function AlbumPosterGenerator({ album }: AlbumPosterGeneratorProps) {
         })
         .finally(() => {
           setIsGenerating(false);
+          domtoimage.toPng(node, param).then((dataUrl: string) => {
+            fetch("/api/poster-generated", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ settings, album, image: dataUrl }),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Failed to notify backend");
+                }
+              })
+              .catch((error) => {
+                console.error("Error notifying backend:", error);
+              });
+          });
         });
     } catch (error) {
       console.error("Error during download:", error);
