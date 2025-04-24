@@ -1,9 +1,7 @@
 import { AlbumGrid } from "@/components/albumGrid";
 import { SearchBar } from "@/components/searchBar";
 import { SearchParamsType } from "@/shared/types";
-import { getData } from "./actionts/spotify";
-import { prisma } from "@/prisma/prisma";
-import { Album } from "@prisma/client";
+import { searchForAlbums } from "./actionts/spotify";
 
 type HomeProps = {
   searchParams: SearchParamsType;
@@ -13,7 +11,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const awaitedSearchParams = await searchParams;
   const awaitedSearchParamsString = awaitedSearchParams.search || "";
 
-  const data = await getData(awaitedSearchParamsString);
+  const data = await searchForAlbums(awaitedSearchParamsString);
 
   return (
     <main className="from-background to-background/90 min-h-screen bg-gradient-to-b">

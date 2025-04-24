@@ -11,8 +11,6 @@ interface AlbumGridProps {
 export function AlbumGrid({ albums }: AlbumGridProps) {
   if (!albums) return null;
 
-  console.log("Albums in AlbumGrid:", albums);
-
   return (
     <>
       {albums.length > 0 ? (

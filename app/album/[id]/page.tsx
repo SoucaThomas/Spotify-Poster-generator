@@ -1,10 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Album } from "@/shared/types";
-import axios from "axios";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Metadata } from "next";
 import { AlbumPosterGenerator } from "@/components/AlbumPosterGenerator";
+import { getAlbumDetails } from "@/app/actionts/spotify";
 
 interface SegmentParams {
   id: string;
@@ -15,59 +14,18 @@ interface PageProps {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }
 
-async function getAlbumDetails(id: string): Promise<Album | null> {
-  try {
-    const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-    const clientSecret = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: Promise<SegmentParams>;
+// }): Promise<Metadata> {
+//   const { id } = await params;
+//   const album = await getAlbumDetails(id);
 
-    if (!clientId || !clientSecret) {
-      throw new Error("Missing Spotify client ID or secret");
-    }
-
-    const tokenResponse = await axios.post(
-      "https://accounts.spotify.com/api/token",
-      new URLSearchParams({
-        grant_type: "client_credentials",
-        client_id: clientId,
-        client_secret: clientSecret,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-
-    const token = tokenResponse.data.access_token;
-
-    const albumResponse = await axios.get(
-      `https://api.spotify.com/v1/albums/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return albumResponse.data;
-  } catch (error) {
-    console.error("Error fetching album details:", error);
-    return null;
-  }
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<SegmentParams>;
-}): Promise<Metadata> {
-  const { id } = await params;
-  const album = await getAlbumDetails(id);
-
-  return {
-    title: album ? `Album Poster: ${album.name}` : "Album Not Found",
-  };
-}
+//   return {
+//     title: album ? `Album Poster: ${album.name}` : "Album Not Found",
+//   };
+// }
 
 export default async function GeneratePosterPage({ params }: PageProps) {
   // Make sure params exists before destructuring
