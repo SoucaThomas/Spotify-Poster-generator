@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { PostHogProvider } from "../components/PostHogProvider";
 import { Navbar } from "@/components/navbar";
+import { BrowserCompatibilityBadge } from "@/components/BrowserCompatibilityBadge";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
             <NuqsAdapter>
               <Navbar />
               {children}
+              <BrowserCompatibilityBadge />
             </NuqsAdapter>
           </PostHogProvider>
         </ThemeProvider>
