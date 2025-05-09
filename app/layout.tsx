@@ -6,6 +6,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { PostHogProvider } from "../components/PostHogProvider";
 import { Navbar } from "@/components/navbar";
 import { BrowserCompatibilityBadge } from "@/components/BrowserCompatibilityBadge";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,21 +19,23 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" href="/public/logo.svg" />
-      </head>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark">
-          <PostHogProvider>
-            <NuqsAdapter>
-              <Navbar />
-              {children}
-              <BrowserCompatibilityBadge />
-            </NuqsAdapter>
-          </PostHogProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <head>
+          <link rel="icon" href="/public/logo.svg" />
+        </head>
+        <body className={inter.className}>
+          <ThemeProvider attribute="class" defaultTheme="dark">
+            <PostHogProvider>
+              <NuqsAdapter>
+                <Navbar />
+                {children}
+                <BrowserCompatibilityBadge />
+              </NuqsAdapter>
+            </PostHogProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
