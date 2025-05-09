@@ -45,6 +45,17 @@ export async function searchForAlbums(searchQuery: string): Promise<Album[]> {
     throw new Error("Failed to fetch Spotify token");
   }
 
+  // Save the search query to the database
+  await prisma.searchQueries.create({
+    data: {
+      query: searchQuery,
+      type: "album",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    },
+  });
+
   // Using the searchQuery we fetch spotify albums
   let spotifySearchResults: AxiosResponse<SpotifyApiSearchAlbumsResponse>;
   try {

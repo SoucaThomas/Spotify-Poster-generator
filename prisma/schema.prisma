@@ -49,3 +49,14 @@ model Album {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime? @map("deleted_at")
 }
+
+model searchQueries {
+  id String @id @default(cuid())
+
+  query String
+  type  String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? @map("deleted_at")
+}
